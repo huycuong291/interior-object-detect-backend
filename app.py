@@ -3,13 +3,8 @@ from flask_cors import CORS
 import os
 import uuid
 app = Flask(__name__)
-CORS(app)
 
-from werkzeug.middleware.proxy_fix import ProxyFix
 
-app.wsgi_app = ProxyFix(
-    app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1
-)
 
 import base64
 import cv2
@@ -28,13 +23,12 @@ def save_evaluate_data(receive_data):
     #for style in os.listdir(save_dir):
     cv2.imwrite(save_dir+"/"+receive_data["style"]+"/"+str(uuid.uuid4())+".jpg", evaluate_img)
 
-@app.post("/detect")
+@app.route("/detect", methods=["POST"])
 def detect_upload_img():
     request_data = request.get_json()
     response =save_crop_images(readBase64(request_data['base64']))
     return response, 201
-
-@app.post("/evaluation")
+@app.route("/evaluation", methods=["POST"])
 def receive_evaluation_img():
     receive_data = request.get_json()
     save_evaluate_data(receive_data)
