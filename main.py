@@ -16,7 +16,16 @@ def save_crop_images(image):
     model = torch.hub.load('ultralytics/yolov5', 'yolov5s')
     # Inference
     results = model(image)
-    crops = results.crop(save=True)
+    model.cpu()  # CPU
+    model.cuda()
+    model.conf = 0.25  # NMS confidence threshold
+    model.iou = 0.45  # NMS IoU threshold
+    model.agnostic = False  # NMS class-agnostic
+    model.multi_label = False  # NMS multiple labels per box
+    model.classes = None  # (optional list) filter by class, i.e. = [0, 15, 16] for COCO persons, cats and dogs
+    model.max_det = 1000  # maximum number of detections per image
+    model.amp = False  # Automatic Mixed Precision (AMP) inference
+    crops = results.crop(save=False)
 
     predict_data = {} 
     predict_data=predict_crop_images(crops)
@@ -43,7 +52,3 @@ def predict_crop_images(crops):
                 predict_data.update({str(index): {"crop_img": new_image_string, "predict":styles }})
                 index = index+1
     return predict_data
-
-
-
-
