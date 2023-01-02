@@ -8,8 +8,10 @@ from flask import Flask, request
 import os
 import uuid
 import torch
-
+from flask_cors import CORS
 app = Flask(__name__)
+CORS(app)
+
 
 IMG_SIZE = 299
 categories = ["ArtDecor","Hitech","Indochina","Industrial","Scandinavian" ]
