@@ -72,14 +72,13 @@ def save_evaluate_data(receive_data):
     cv2.imwrite(save_dir+"/"+receive_data["style"]+"/"+str(uuid.uuid4())+".jpg", evaluate_img)
 
 
-@app.route("/detect", methods=["POST"])
+@app.post("/detect")
 def detect_upload_img():
     request_data = request.get_json()
     response =save_crop_images(readBase64(request_data['base64']))
     return response, 201
 
-
-@app.route("/evaluation", methods=["POST"])
+@app.post("/evaluation")
 def receive_evaluation_img():
     receive_data = request.get_json()
     save_evaluate_data(receive_data)
