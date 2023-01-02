@@ -1,21 +1,19 @@
 from flask import Flask, request
 import os
 import uuid
-app = Flask(__name__)
-
-
-
 import base64
 import cv2
 import numpy as np
 from main import save_crop_images
 
-
+app = Flask(__name__)
+    
 def readBase64(uri):
    encoded_data = uri.split(',')[1]
    nparr = np.fromstring(base64.b64decode(encoded_data), np.uint8)
    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
    return img
+
 def save_evaluate_data(receive_data):
     evaluate_img=(readBase64(receive_data["crops_img"]))
     save_dir = './evaluate_data'
@@ -38,6 +36,5 @@ def receive_evaluation_img():
     response="Success"
     return response, 201
 
-    
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv("PORT", default=5000))
