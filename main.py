@@ -17,7 +17,6 @@ def save_crop_images(image):
     # Inference
     results = model(image)
     model.cpu()  # CPU
-    model.cuda()
     model.conf = 0.25  # NMS confidence threshold
     model.iou = 0.45  # NMS IoU threshold
     model.agnostic = False  # NMS class-agnostic
