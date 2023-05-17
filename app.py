@@ -12,19 +12,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-import yolov5
 
-# load pretrained model
-model = yolov5.load('yolov5s.pt')
- 
-model.cpu()  # CPU
-model.conf = 0.25  # NMS confidence threshold
-model.iou = 0.45  # NMS IoU threshold
-model.agnostic = False  # NMS class-agnostic
-model.multi_label = False  # NMS multiple labels per box
-model.classes = None  # (optional list) filter by class, i.e. = [0, 15, 16] for COCO persons, cats and dogs
-model.max_det = 1000  # maximum number of detections per image
-model.amp = False  # Automatic Mixed Precision (AMP) inference # maximum number of detections per image
 IMG_SIZE = 299
 categories = ["ArtDecor","Hitech","Indochina","Industrial","Scandinavian" ]
 model = tf.keras.models.load_model(r"./xception_model_2.h5")
@@ -32,9 +20,17 @@ model = tf.keras.models.load_model(r"./xception_model_2.h5")
 
 def save_crop_images(image): 
     # Model
-
+    model = torch.hub.load('ultralytics/yolov5', 'yolov5n')
     # Inference
     results = model(image)
+    model.cpu()  # CPU
+    model.conf = 0.25  # NMS confidence threshold
+    model.iou = 0.45  # NMS IoU threshold
+    model.agnostic = False  # NMS class-agnostic
+    model.multi_label = False  # NMS multiple labels per box
+    model.classes = None  # (optional list) filter by class, i.e. = [0, 15, 16] for COCO persons, cats and dogs
+    model.max_det = 1000  # maximum number of detections per image
+    model.amp = False  # Automatic Mixed Precision (AMP) inference
     crops = results.crop(save=False)
 
     predict_data = {} 
