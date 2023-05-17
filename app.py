@@ -9,6 +9,7 @@ import os
 import uuid
 import torch
 from flask_cors import CORS
+from ultralytics import YOLO
 app = Flask(__name__)
 CORS(app)
 
@@ -20,7 +21,7 @@ model = tf.keras.models.load_model(r"./xception_model_2.h5")
 
 def save_crop_images(image): 
     # Model
-    model = torch.hub.load('ultralytics/yolov5', 'yolov5s')
+    model = YOLO("yolov5s.pt")
     # Inference
     results = model(image)
     model.cpu()  # CPU
