@@ -20,11 +20,10 @@ model = tf.keras.models.load_model(r"./xception_model_2.h5")
 
 
 def save_crop_images(image): 
-    # Model
-    model = YOLO("yolov5su.pt")
+    model = torch.hub.load('ultralytics/yolov5', 'yolov5s')
     # Inference
     results = model(image)
-  
+    model.cpu()  # CPU
     model.conf = 0.25  # NMS confidence threshold
     model.iou = 0.45  # NMS IoU threshold
     model.agnostic = False  # NMS class-agnostic
